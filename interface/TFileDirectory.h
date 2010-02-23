@@ -7,6 +7,8 @@
  */
 #include <string>
 #include "CommonTools/Utils/interface/TH1AddDirectorySentry.h"
+#include <TDirectory.h>
+#include <TClass.h>
 
 namespace fwlite {
  class TFileService;
@@ -20,39 +22,56 @@ class TFileDirectory {
 public:
   /// descructor
   virtual ~TFileDirectory() { }
+
+  TDirectory * cd() const;
   /// make new ROOT object
   template<typename T>
   T * make() const {
+    TDirectory *d = cd();
     T* t = new T();
-    t->SetDirectory(cd()); 
+    ROOT::DirAutoAdd_t func = T::Class()->GetDirectoryAutoAdd();
+    if (func) { func(t,d); } 
+    else { d->Append(t); }
     return t;
   }
   /// make new ROOT object
   template<typename T, typename Arg1>
   T * make( const Arg1 & a1 ) const {
+    TDirectory *d = cd();
     T * t = new T( a1 );
-    t->SetDirectory(cd());
+    ROOT::DirAutoAdd_t func = T::Class()->GetDirectoryAutoAdd();
+    if (func) {func(t,d); }
+    else { d->Append(t); }
     return t; 
   }
   /// make new ROOT object
   template<typename T, typename Arg1, typename Arg2>
   T * make( const Arg1 & a1, const Arg2 & a2 ) const {
+    TDirectory *d = cd();
     T * t =  new T( a1, a2 );
-    t->SetDirectory(cd());
+    ROOT::DirAutoAdd_t func = T::Class()->GetDirectoryAutoAdd();
+    if (func) {func(t,d); }
+    else { d->Append(t); }
     return t;
   }
   /// make new ROOT object
   template<typename T, typename Arg1, typename Arg2, typename Arg3>
   T * make( const Arg1 & a1, const Arg2 & a2, const Arg3 & a3 ) const {
+    TDirectory *d = cd();
     T * t =  new T( a1, a2, a3 );
-    t->SetDirectory(cd());
+    ROOT::DirAutoAdd_t func = T::Class()->GetDirectoryAutoAdd();
+    if (func) {func(t,d); }
+    else { d->Append(t); }
     return t;
   }
   /// make new ROOT object
   template<typename T, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
   T * make( const Arg1 & a1, const Arg2 & a2, const Arg3 & a3, const Arg4 & a4 ) const {
+    TDirectory *d = cd();
     T * t =  new T( a1, a2, a3, a4 );
-    t->SetDirectory(cd());
+    ROOT::DirAutoAdd_t func = T::Class()->GetDirectoryAutoAdd();
+    if (func) {func(t,d); }
+    else { d->Append(t); }
     return t;
   }
   /// make new ROOT object
@@ -60,8 +79,11 @@ public:
 	   typename Arg5>
   T * make( const Arg1 & a1, const Arg2 & a2, const Arg3 & a3, const Arg4 & a4, 
 	    const Arg5 & a5 ) const {
+    TDirectory *d = cd();
     T * t =  new T( a1, a2, a3, a4, a5 );
-    t->SetDirectory(cd());
+    ROOT::DirAutoAdd_t func = T::Class()->GetDirectoryAutoAdd();
+    if (func) {func(t,d); }
+    else { d->Append(t); }
     return t;
   }
   /// make new ROOT object
@@ -69,8 +91,11 @@ public:
 	   typename Arg5, typename Arg6>
   T * make( const Arg1 & a1, const Arg2 & a2, const Arg3 & a3, const Arg4 & a4, 
 	    const Arg5 & a5, const Arg6 & a6 ) const {
+    TDirectory *d = cd();
     T * t =  new T( a1, a2, a3, a4, a5, a6 );
-    t->SetDirectory(cd());
+    ROOT::DirAutoAdd_t func = T::Class()->GetDirectoryAutoAdd();
+    if (func) {func(t,d); }
+    else { d->Append(t); }
     return t;
   }
   /// make new ROOT object
@@ -78,8 +103,11 @@ public:
 	   typename Arg5, typename Arg6, typename Arg7>
   T * make( const Arg1 & a1, const Arg2 & a2, const Arg3 & a3, const Arg4 & a4, 
 	    const Arg5 & a5, const Arg6 & a6, const Arg7 & a7 ) const {
+    TDirectory *d = cd();
     T * t =  new T( a1, a2, a3, a4, a5, a6, a7 );
-    t->SetDirectory(cd());
+    ROOT::DirAutoAdd_t func = T::Class()->GetDirectoryAutoAdd();
+    if (func) {func(t,d); }
+    else { d->Append(t); }
     return t;
   }
   /// make new ROOT object
@@ -87,8 +115,11 @@ public:
 	   typename Arg5, typename Arg6, typename Arg7, typename Arg8>
   T * make( const Arg1 & a1, const Arg2 & a2, const Arg3 & a3, const Arg4 & a4, 
 	    const Arg5 & a5, const Arg6 & a6, const Arg7 & a7, const Arg8 & a8 ) const {
+    TDirectory *d = cd();
     T * t =  new T( a1, a2, a3, a4, a5, a6, a7, a8 );
-    t->SetDirectory(cd());
+    ROOT::DirAutoAdd_t func = T::Class()->GetDirectoryAutoAdd();
+    if (func) {func(t,d); }
+    else { d->Append(t); }
     return t;
   }
   /// make new ROOT object
@@ -98,8 +129,11 @@ public:
   T * make( const Arg1 & a1, const Arg2 & a2, const Arg3 & a3, const Arg4 & a4, 
 	    const Arg5 & a5, const Arg6 & a6, const Arg7 & a7, const Arg8 & a8,
 	    const Arg9 & a9 ) const {
+    TDirectory *d = cd();
     T * t =  new T( a1, a2, a3, a4, a5, a6, a7, a8, a9 );
-    t->SetDirectory(cd());
+    ROOT::DirAutoAdd_t func = T::Class()->GetDirectoryAutoAdd();
+    if (func) {func(t,d); }
+    else { d->Append(t); }
     return t;
   }
   /// make new ROOT object
@@ -109,8 +143,11 @@ public:
   T * make( const Arg1 & a1, const Arg2 & a2, const Arg3 & a3, const Arg4 & a4, 
 	    const Arg5 & a5, const Arg6 & a6, const Arg7 & a7, const Arg8 & a8,
 	    const Arg9 & a9, const Arg10 & a10 ) const {
+    TDirectory *d = cd(); 
     T * t =  new T( a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 );
-    t->SetDirectory(cd());
+    ROOT::DirAutoAdd_t func = T::Class()->GetDirectoryAutoAdd();
+    if (func) {func(t,d); }
+    else { d->Append(t); }
     return t;
   }
   /// make new ROOT object
@@ -120,8 +157,11 @@ public:
   T * make( const Arg1 & a1, const Arg2 & a2, const Arg3 & a3, const Arg4 & a4, 
 	    const Arg5 & a5, const Arg6 & a6, const Arg7 & a7, const Arg8 & a8,
 	    const Arg9 & a9, const Arg10 & a10, const Arg11 & a11 ) const {
+    TDirectory *d = cd();
     T * t =  new T( a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11 );
-    t->SetDirectory(cd());
+    ROOT::DirAutoAdd_t func = T::Class()->GetDirectoryAutoAdd();
+    if (func) {func(t,d); }
+    else { d->Append(t); }
     return t;
   }
   /// make new ROOT object
@@ -131,8 +171,11 @@ public:
   T * make( const Arg1 & a1, const Arg2 & a2, const Arg3 & a3, const Arg4 & a4, 
 	    const Arg5 & a5, const Arg6 & a6, const Arg7 & a7, const Arg8 & a8,
 	    const Arg9 & a9, const Arg10 & a10, const Arg11 & a11, const Arg12 & a12 ) const {
+    TDirectory *d = cd();
     T * t =  new T( a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 );
-    t->SetDirectory(cd());
+    ROOT::DirAutoAdd_t func = T::Class()->GetDirectoryAutoAdd();
+    if (func) {func(t,d); }
+    else { d->Append(t); }
     return t;
   }
   /// create a new subdirectory
@@ -148,7 +191,6 @@ private:
   TFile * file_;
   std::string dir_, descr_, path_;
   std::string fullPath() const;
-  TDirectory * cd() const;
 };
 
 #endif
