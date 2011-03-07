@@ -7,6 +7,8 @@
 #include "DataFormats/Candidate/interface/LeafCandidate.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
+#include "CommonTools/Utils/interface/StringToEnumValue.h"
+
 #include <iostream>
 #include <Reflex/Object.h>
 #include <Reflex/Type.h>
@@ -15,6 +17,7 @@
 
 class testExpressionParser : public CppUnit::TestFixture {
   CPPUNIT_TEST_SUITE(testExpressionParser);
+  CPPUNIT_TEST(testStringToEnum);
   CPPUNIT_TEST(checkAll);
   CPPUNIT_TEST_SUITE_END();
 
@@ -22,6 +25,7 @@ public:
   void setUp() {}
   void tearDown() {}
   void checkAll(); 
+  void testStringToEnum();
   void checkTrack(const std::string &, double);
   void checkCandidate(const std::string &, double, bool lazy=false);
   void checkJet(const std::string &, double);
@@ -91,6 +95,18 @@ void testExpressionParser::checkMuon(const std::string & expression, double x) {
   }
 }
 
+void testExpressionParser::testStringToEnum() {
+    std::cout << "Testing reco::Muon::ArbitrationType SegmentArbitration"  << std::endl;
+    CPPUNIT_ASSERT_EQUAL(StringToEnumValue<reco::Muon::ArbitrationType>("SegmentArbitration"),  int(reco::Muon::SegmentArbitration));
+    std::cout << "Testing reco::TrackBase::TrackQuality (tight, highPurity)"  << std::endl;
+    std::vector<std::string> algos;
+    algos.push_back("tight"); algos.push_back("highPurity");
+    std::vector<int> algoValues = StringToEnumValue<reco::TrackBase::TrackQuality>(algos);
+    CPPUNIT_ASSERT(algoValues.size() == 2);
+    CPPUNIT_ASSERT_EQUAL(algoValues[0], int(reco::TrackBase::tight));
+    CPPUNIT_ASSERT_EQUAL(algoValues[1], int(reco::TrackBase::highPurity));
+}
+
 
 void testExpressionParser::checkAll() {
   using namespace reco;
@@ -138,6 +154,7 @@ void testExpressionParser::checkAll() {
     checkTrack("extra.outerPhi", trk.extra()->outerPhi());
     checkTrack("referencePoint.R", trk.referencePoint().R());
     checkTrack("algo", reco::Track::iter2);
+    checkTrack("quality('highPurity')", trk.quality(reco::TrackBase::highPurity));
     checkTrack("cosh(theta)", cosh(trk.theta()));
     checkTrack("hypot(px, py)", hypot(trk.px(), trk.py()));
     checkTrack("?ndof<0?1:0", trk.ndof()<0?1:0);
@@ -214,17 +231,6 @@ void testExpressionParser::checkAll() {
     checkJet("bDiscriminator(\"d \")" , jet.bDiscriminator("d " ));
   }
 
-  {
-     ROOT::Reflex::Type t = ROOT::Reflex::Type::ByTypeInfo(typeid(pat::Jet));
-     std::vector<reco::SecondaryVertexTagInfo::IndexedTrackData> trackData;
-     std::vector<reco::SecondaryVertexTagInfo::VertexData> vertexData(1);
-     
-     reco::SoftLeptonTagInfo dummyInfo;
-     reco::SoftLeptonProperties props;
-     props.sip3d = 10;
-     dummyInfo.insert(edm::RefToBase<reco::Track>(), props);
-     edm::Ptr<reco::BaseTagInfo> ptrDummyInfo(edm::ProductID(1),&dummyInfo,0);
-  }
   muon = pat::Muon(reco::Muon(+1, p1+p2));
   muon.setUserIso(2.0);
   muon.setUserIso(42.0, 1);
@@ -257,7 +263,9 @@ void testExpressionParser::checkAll() {
         for (size_t i = 0; i < 10*1000; ++i) {
             for (size_t j = 0; j < 100; ++j) {
                 res += expr->value(o);
+                break;
             }
+            break;
             if (i % 1000 == 999) std::cout << "iter " << i << std::endl;
         }
     }
